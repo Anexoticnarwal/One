@@ -5,93 +5,129 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Inner Sanctuary</title>
   <style>
-    html {
-      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb') center/cover no-repeat fixed;
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      overflow-x: hidden;
+      height: 100%;
     }
 
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      color: #333;
-      background-color: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(4px);
+      position: relative;
+      background-color: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(6px);
+      z-index: 1;
     }
 
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 2rem;
-    }
-
-    canvas {
+    .background {
       position: fixed;
       top: 0; left: 0;
       width: 100%;
       height: 100%;
       z-index: 0;
+      background-size: cover;
+      background-position: center;
+      animation: natureCycle 60s infinite;
+    }
+
+    @keyframes natureCycle {
+      0%   { background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb'); }
+      25%  { background-image: url('https://images.unsplash.com/photo-1503264116251-35a269479413'); }
+      50%  { background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9'); }
+      75%  { background-image: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee'); }
+      100% { background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb'); }
+    }
+
+    .leaf {
+      position: fixed;
+      top: -50px;
+      width: 24px;
+      height: 24px;
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Maple_leaf.svg/1200px-Maple_leaf.svg.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: fall linear infinite;
+      z-index: 1;
       pointer-events: none;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 1.5rem;
+      position: relative;
+      z-index: 2;
     }
 
     header {
       text-align: center;
-      padding: 4rem 2rem;
+      padding: 3rem 1rem;
     }
 
     header h1 {
-      font-size: 2.5rem;
+      font-size: 2.2rem;
       color: #2c3e50;
+      margin-bottom: 0.5rem;
     }
 
     header p {
-      font-size: 1.2rem;
+      font-size: 1rem;
       color: #555;
     }
 
     section {
-      padding: 2rem 1rem;
-    }
-
-    .card {
-      background: white;
+      padding: 1.5rem 1rem;
+      background: rgba(255,255,255,0.85);
       border-radius: 10px;
-      padding: 1.5rem;
-      margin: 1rem 0;
+      margin-bottom: 2rem;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: center;
     }
 
-    .section-pad h2 {
-      font-size: 2rem;
+    section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    section p {
+      font-size: 1rem;
       margin-bottom: 1rem;
-    }
-
-    .section-pad p {
-      font-size: 1.1rem;
-      max-width: 700px;
-      margin: auto;
     }
 
     #quote {
       font-style: italic;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       margin-top: 1rem;
       transition: opacity 0.5s ease;
     }
 
     button {
       margin-top: 1rem;
-      padding: 10px 20px;
+      padding: 10px 16px;
       border: none;
       border-radius: 5px;
       background: #2c3e50;
       color: white;
       font-size: 1rem;
       cursor: pointer;
+      width: 100%;
+      max-width: 300px;
     }
 
     #notepad {
       width: 100%;
-      height: 200px;
+      height: 180px;
       padding: 1rem;
       font-size: 1rem;
       border-radius: 10px;
@@ -103,24 +139,28 @@
 
     footer {
       text-align: center;
-      padding: 2rem;
+      padding: 2rem 1rem;
       font-size: 0.9rem;
       color: #666;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 480px) {
       header h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
+      }
+
+      section h2 {
+        font-size: 1.3rem;
       }
 
       #notepad {
-        height: 150px;
+        height: 140px;
       }
     }
   </style>
 </head>
 <body>
-  <canvas id="particles"></canvas>
+  <div class="background"></div>
   <div class="container">
 
     <header>
@@ -128,14 +168,14 @@
       <p>A space for reflection, calm, and clarity</p>
     </header>
 
-    <section id="mindfulness" class="section-pad">
+    <section id="mindfulness">
       <h2>🌸 Mindful Quotes</h2>
       <p>Tap the button below to receive gentle inspiration.</p>
       <div id="quote">Click the button to begin...</div>
       <button onclick="generateQuote()">✨ Inspire Me</button>
     </section>
 
-    <section id="growth" class="section-pad">
+    <section id="growth">
       <h2>📝 Personal Reflections</h2>
       <p>Write freely. This notepad saves your thoughts locally, so you can return anytime.</p>
       <textarea id="notepad" placeholder="Start writing..."></textarea>
@@ -148,57 +188,6 @@
   </div>
 
   <script>
-    // Floating particles
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    document.addEventListener('mousemove', e => {
-      for (let i = 0; i < 5; i++) {
-        particles.push({
-          x: e.clientX,
-          y: e.clientY,
-          size: Math.random() * 4 + 1,
-          alpha: 1,
-          dx: (Math.random() - 0.5) * 2,
-          dy: (Math.random() - 0.5) * 2
-        });
-      }
-    });
-
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach((p, i) => {
-        p.x += p.dx;
-        p.y += p.dy;
-        p.alpha -= 0.01;
-        if (p.alpha <= 0) particles.splice(i, 1);
-        else {
-          ctx.fillStyle = `rgba(0,150,136,${p.alpha})`;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      });
-      requestAnimationFrame(animateParticles);
-    }
-    animateParticles();
-
-    // Notepad save/load
-    const notepad = document.getElementById('notepad');
-    notepad.value = localStorage.getItem('notepad') || '';
-    notepad.addEventListener('input', () => {
-      localStorage.setItem('notepad', notepad.value);
-    });
-
     // Quote generator
     const quotes = [
       "You are enough, just as you are.",
@@ -215,6 +204,25 @@
       const quote = quotes[Math.floor(Math.random() * quotes.length)];
       document.getElementById('quote').textContent = quote;
     }
+
+    // Notepad save/load
+    const notepad = document.getElementById('notepad');
+    notepad.value = localStorage.getItem('notepad') || '';
+    notepad.addEventListener('input', () => {
+      localStorage.setItem('notepad', notepad.value);
+    });
+
+    // Leaf animation
+    function createLeaf() {
+      const leaf = document.createElement('div');
+      leaf.className = 'leaf';
+      leaf.style.left = Math.random() * window.innerWidth + 'px';
+      leaf.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(leaf);
+      setTimeout(() => leaf.remove(), 10000);
+    }
+
+    setInterval(createLeaf, 700);
   </script>
 </body>
 </html>
