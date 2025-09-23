@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Inner Sanctuary</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
+
     html, body {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Merriweather', serif;
       overflow-x: hidden;
       height: 100%;
     }
@@ -89,10 +91,11 @@
 
     section {
       padding: 1.5rem 1rem;
-      background: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.5); /* Increased transparency */
       border-radius: 10px;
       margin-bottom: 2rem;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      backdrop-filter: blur(4px); /* Adds a nice blur effect to content */
     }
 
     section h2 {
@@ -202,28 +205,4 @@
 
     function generateQuote() {
       const quote = quotes[Math.floor(Math.random() * quotes.length)];
-      document.getElementById('quote').textContent = quote;
-    }
-
-    // Notepad save/load
-    const notepad = document.getElementById('notepad');
-    notepad.value = localStorage.getItem('notepad') || '';
-    notepad.addEventListener('input', () => {
-      localStorage.setItem('notepad', notepad.value);
-    });
-
-    // Leaf animation
-    function createLeaf() {
-      const leaf = document.createElement('div');
-      leaf.className = 'leaf';
-      leaf.style.left = Math.random() * window.innerWidth + 'px';
-      leaf.style.animationDuration = (5 + Math.random() * 5) + 's';
-      document.body.appendChild(leaf);
-      setTimeout(() => leaf.remove(), 10000);
-    }
-
-    setInterval(createLeaf, 700);
-  </script>
-</body>
-</html>
-
+      document.getElementById('quote').textContent = quote
