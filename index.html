@@ -1,265 +1,132 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Inner Sanctuary</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb') center/cover no-repeat fixed;
-      color: #333;
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-    }
-
-    canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    header {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      background: rgba(255,255,255,0.8);
-      position: relative;
-      z-index: 1;
-    }
-
-    header h1 {
-      font-size: 3.5rem;
-      z-index: 2;
-      color: #2c3e50;
-      text-shadow: 0 0 10px rgba(255,255,255,0.6);
-    }
-
-    header p {
-      font-size: 1.4rem;
-      z-index: 2;
-      margin-top: 1rem;
-      color: #555;
-    }
-
-    section {
-      padding: 4rem 2rem;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-      background: rgba(255,255,255,0.85);
-    }
-
-    .card {
-      display: block;
-      text-decoration: none;
-      color: #333;
-      background: rgba(255,255,255,0.9);
-      border-radius: 10px;
-      padding: 2rem;
-      margin: 1rem auto;
-      max-width: 600px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
-      cursor: pointer;
-    }
-
-    .card:hover {
-      transform: scale(1.03);
-    }
-
-    .section-pad h2 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .section-pad p {
-      font-size: 1.2rem;
-      max-width: 700px;
-      margin: auto;
-    }
-
-    #notepad {
-      width: 90%;
-      max-width: 700px;
-      height: 300px;
-      margin-top: 2rem;
-      padding: 1rem;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: none;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      resize: none;
-    }
-
-    #quote {
-      margin-top: 2rem;
-      font-style: italic;
-      font-size: 1.4rem;
-      color: #2c3e50;
-      transition: opacity 0.5s ease;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem;
-      background: rgba(255,255,255,0.9);
-      color: #666;
-      position: relative;
-      z-index: 1;
-    }
-  </style>
-</head>
-<body>
-
-  <canvas id="particles"></canvas>
-
-  <header>
-    <h1>Inner Sanctuary</h1>
-    <p>A space for reflection, calm, and clarity</p>
-  </header>
-
-  <section>
-    <a href="#mindfulness" class="card">
-      <h2>🌸 Mindful Quotes</h2>
-      <p>Swipe left or right to receive gentle inspiration.</p>
-    </a>
-    <a href="#growth" class="card">
-      <h2>📝 Personal Reflections</h2>
-      <p>Capture your thoughts, dreams, and intentions.</p>
-    </a>
-  </section>
-
-  <section id="mindfulness" class="section-pad">
+<section>
+  <a href="#mindfulness" class="card">
     <h2>🌸 Mindful Quotes</h2>
-    <p>Swipe left or right (or use arrow keys) to reveal a new quote.</p>
-    <div id="quote">Swipe to begin...</div>
-  </section>
-
-  <section id="growth" class="section-pad">
+    <p>Swipe left or right to receive gentle inspiration.</p>
+  </a>
+  <a href="#growth" class="card">
     <h2>📝 Personal Reflections</h2>
-    <p>Write freely. This notepad saves your thoughts locally, so you can return anytime.</p>
-    <textarea id="notepad" placeholder="Start writing..."></textarea>
-  </section>
+    <p>Capture your thoughts, dreams, and intentions.</p>
+  </a>
+</section>
 
-  <footer>
-    &copy; 2025 Inner Sanctuary. Breathe. Reflect. Grow.
-  </footer>
+<section id="mindfulness" class="section-pad">
+  <h2>🌸 Mindful Quotes</h2>
+  <p>Swipe left or right (or use arrow keys) to reveal a new quote.</p>
+  <div id="quote">Swipe to begin...</div>
+</section>
 
-  <script>
-    window.onload = function() {
-      // Floating particles
-      const canvas = document.getElementById('particles');
-      const ctx = canvas.getContext('2d');
-      let particles = [];
+<section id="growth" class="section-pad">
+  <h2>📝 Personal Reflections</h2>
+  <p>Write freely. This notepad saves your thoughts locally, so you can return anytime.</p>
+  <textarea id="notepad" placeholder="Start writing..."></textarea>
+</section>
 
-      function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
+<footer>
+  &copy; 2025 Inner Sanctuary. Breathe. Reflect. Grow.
+</footer>
 
-      window.addEventListener('resize', resizeCanvas);
-      resizeCanvas();
+<script>
+  // Floating particles
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
 
-      document.addEventListener('mousemove', e => {
-        for (let i = 0; i < 5; i++) {
-          particles.push({
-            x: e.clientX,
-            y: e.clientY,
-            size: Math.random() * 4 + 1,
-            alpha: 1,
-            dx: (Math.random() - 0.5) * 2,
-            dy: (Math.random() - 0.5) * 2
-          });
-        }
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  document.addEventListener('mousemove', e => {
+    for (let i = 0; i < 5; i++) {
+      particles.push({
+        x: e.clientX,
+        y: e.clientY,
+        size: Math.random() * 4 + 1,
+        alpha: 1,
+        dx: (Math.random() - 0.5) * 2,
+        dy: (Math.random() - 0.5) * 2
       });
+    }
+  });
 
-      function animateParticles() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach((p, i) => {
-          p.x += p.dx;
-          p.y += p.dy;
-          p.alpha -= 0.01;
-          if (p.alpha <= 0) particles.splice(i, 1);
-          else {
-            ctx.fillStyle = `rgba(0,150,136,${p.alpha})`;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        });
-        requestAnimationFrame(animateParticles);
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p, i) => {
+      p.x += p.dx;
+      p.y += p.dy;
+      p.alpha -= 0.01;
+      if (p.alpha <= 0) particles.splice(i, 1);
+      else {
+        ctx.fillStyle = `rgba(0,150,136,${p.alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
       }
-      animateParticles();
+    });
+    requestAnimationFrame(animateParticles);
+  }
+  animateParticles();
 
-      // Notepad save/load
-      const notepad = document.getElementById('notepad');
-      notepad.value = localStorage.getItem('notepad') || '';
-      notepad.addEventListener('input', () => {
-        localStorage.setItem('notepad', notepad.value);
-      });
+  // Notepad save/load
+  const notepad = document.getElementById('notepad');
+  notepad.value = localStorage.getItem('notepad') || '';
+  notepad.addEventListener('input', () => {
+    localStorage.setItem('notepad', notepad.value);
+  });
 
-      // Mindful Quotes
-      const quotes = [
-        "You are enough, just as you are.",
-        "Peace begins with a deep breath.",
-        "The obstacle is the path. — Zen Proverb",
-        "Small steps every day lead to big change.",
-        "Your thoughts shape your reality.",
-        "Let go of what no longer serves you.",
-        "Joy is a decision, not a condition.",
-        "Be kind to yourself. You’re doing your best."
-      ];
-      let quoteIndex = 0;
-      const quoteDiv = document.getElementById('quote');
+  // Mindful Quotes
+  const quotes = [
+    "You are enough, just as you are.",
+    "Peace begins with a deep breath.",
+    "The obstacle is the path. — Zen Proverb",
+    "Small steps every day lead to big change.",
+    "Your thoughts shape your reality.",
+    "Let go of what no longer serves you.",
+    "Joy is a decision, not a condition.",
+    "Be kind to yourself. You’re doing your best."
+  ];
+  let quoteIndex = 0;
+  const quoteDiv = document.getElementById('quote');
 
-      function showQuote(index) {
-        quoteDiv.style.opacity = 0;
-        setTimeout(() => {
-          quoteDiv.textContent = quotes[index];
-          quoteDiv.style.opacity = 1;
-        }, 300);
-      }
+  function showQuote(index) {
+    quoteDiv.style.opacity = 0;
+    setTimeout(() => {
+      quoteDiv.textContent = quotes[index];
+      quoteDiv.style.opacity = 1;
+    }, 300);
+  }
 
-      showQuote(quoteIndex);
+  showQuote(quoteIndex);
 
-      function nextQuote() {
-        quoteIndex = (quoteIndex + 1) % quotes.length;
-        showQuote(quoteIndex);
-      }
+  function nextQuote() {
+    quoteIndex = (quoteIndex + 1) % quotes.length;
+    showQuote(quoteIndex);
+  }
 
-      function prevQuote() {
-        quoteIndex = (quoteIndex - 1 + quotes.length) % quotes.length;
-        showQuote(quoteIndex);
-      }
+  function prevQuote() {
+    quoteIndex = (quoteIndex - 1 + quotes.length) % quotes.length;
+    showQuote(quoteIndex);
+  }
 
-      document.addEventListener('keydown', e => {
-        if (e.key === 'ArrowRight') nextQuote();
-        if (e.key === 'ArrowLeft') prevQuote();
-      });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') nextQuote();
+    if (e.key === 'ArrowLeft') prevQuote();
+  });
 
-      let touchStartX = null;
-      document.addEventListener('touchstart', e => {
-        touchStartX = e.changedTouches[0].screenX;
-      });
+  let touchStartX = null;
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
 
-      document.addEventListener('touchend', e => {
-        const touchEndX = e.changedTouches[0].screenX;
-        if (touchStartX !== null) {
-          if (touchEndX < touchStartX - 50) nextQuote();
-          else if (touchEndX > touchStartX + 50) prevQuote();
-          touchStartX = null;
-        }
-      });
-    };
-  </script>
-
-</body>
-</html>
+  document.addEventListener('touchend', e => {
+    const touchEndX = e.changedTouches[0].screenX;
+    if (touchStartX !== null) {
+      if (touchEndX < touchStartX - 50) nextQuote();
+      else if (touchEndX > touchStartX + 50) prevQuote();
+      touchStartX = null;
+    }
+  });
+</script>
