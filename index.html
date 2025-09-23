@@ -10,7 +10,7 @@
       font-family: 'Segoe UI', sans-serif;
       background: radial-gradient(circle at center, #0f2027, #203a43, #2c5364);
       color: white;
-      overflow-x: hidden;
+      scroll-behavior: smooth;
     }
 
     header {
@@ -56,23 +56,47 @@
     }
 
     .card {
+      display: block;
+      text-decoration: none;
+      color: white;
       background: rgba(255,255,255,0.1);
       border-radius: 10px;
       padding: 2rem;
       margin: 1rem auto;
       max-width: 600px;
       box-shadow: 0 0 20px rgba(0,255,255,0.2);
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, background 0.3s ease;
+      cursor: pointer;
     }
 
     .card:hover {
       transform: scale(1.05);
+      background: rgba(255,255,255,0.2);
+    }
+
+    .wow-section {
+      min-height: 100vh;
+      padding: 4rem 2rem;
+      background: #111;
+      color: #eee;
+    }
+
+    .wow-section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #00f7ff;
+    }
+
+    .wow-section p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: auto;
     }
 
     footer {
       text-align: center;
       padding: 2rem;
-      background: #111;
+      background: #000;
       color: #aaa;
     }
   </style>
@@ -85,18 +109,33 @@
   </header>
 
   <section>
-    <div class="card">
+    <a href="#wow1" class="card">
       <h2>🚀 Interactive Design</h2>
       <p>Hover, glow, and animate — this site responds to you.</p>
-    </div>
-    <div class="card">
+    </a>
+    <a href="#wow2" class="card">
       <h2>🧠 Smart Content</h2>
       <p>Built to expand with your ideas — add sections, widgets, or even AI.</p>
-    </div>
-    <div class="card">
+    </a>
+    <a href="#wow3" class="card">
       <h2>🎨 Visual Impact</h2>
       <p>Parallax backgrounds, glowing text, and smooth transitions make it unforgettable.</p>
-    </div>
+    </a>
+  </section>
+
+  <section id="wow1" class="wow-section">
+    <h2>🚀 Interactive Design</h2>
+    <p>Imagine a site that reacts to your every move — glowing buttons, floating particles, and dark mode toggles. This section is your playground for interactivity and motion.</p>
+  </section>
+
+  <section id="wow2" class="wow-section">
+    <h2>🧠 Smart Content</h2>
+    <p>From live weather widgets to AI-generated quotes, this section is built to think with you. Add dynamic content, connect APIs, and let your site evolve with your ideas.</p>
+  </section>
+
+  <section id="wow3" class="wow-section">
+    <h2>🎨 Visual Impact</h2>
+    <p>Layered parallax, animated gradients, and surreal visuals — this is where design becomes emotion. Make your visitors feel something unforgettable.</p>
   </section>
 
   <footer>
