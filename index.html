@@ -5,21 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Inner Sanctuary</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
-
     html, body {
       margin: 0;
       padding: 0;
-      font-family: 'Merriweather', serif;
+      font-family: 'Segoe UI', sans-serif;
       overflow-x: hidden;
       height: 100%;
-    }
-
-    body {
-      position: relative;
       background-color: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(6px);
-      z-index: 1;
     }
 
     .background {
@@ -27,7 +20,7 @@
       top: 0; left: 0;
       width: 100%;
       height: 100%;
-      z-index: 0;
+      z-index: -1;
       background-size: cover;
       background-position: center;
       animation: natureCycle 60s infinite;
@@ -41,66 +34,39 @@
       100% { background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb'); }
     }
 
-    .leaf {
-      position: fixed;
-      top: -50px;
-      width: 24px;
-      height: 24px;
-      background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Maple_leaf.svg/1200px-Maple_leaf.svg.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      animation: fall linear infinite;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
     .container {
-      max-width: 700px;
+      max-width: 800px;
       margin: auto;
-      padding: 1.5rem;
-      position: relative;
-      z-index: 2;
+      padding: 2rem 1rem;
     }
 
     header {
       text-align: center;
-      padding: 3rem 1rem;
+      padding: 2rem 1rem;
     }
 
     header h1 {
-      font-size: 2.2rem;
+      font-size: 2.5rem;
       color: #2c3e50;
       margin-bottom: 0.5rem;
     }
 
     header p {
-      font-size: 1rem;
+      font-size: 1.1rem;
       color: #555;
     }
 
     section {
-      padding: 1.5rem 1rem;
-      background: rgba(255,255,255,0.5); /* Increased transparency */
-      border-radius: 10px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
       margin-bottom: 2rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      backdrop-filter: blur(4px); /* Adds a nice blur effect to content */
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
 
     section h2 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
     }
 
     section p {
@@ -110,34 +76,40 @@
 
     #quote {
       font-style: italic;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       margin-top: 1rem;
       transition: opacity 0.5s ease;
     }
 
-    button {
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
       margin-top: 1rem;
+    }
+
+    button {
       padding: 10px 16px;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       background: #2c3e50;
       color: white;
       font-size: 1rem;
       cursor: pointer;
-      width: 100%;
-      max-width: 300px;
+      flex: 1;
+      min-width: 140px;
     }
 
     #notepad {
       width: 100%;
-      height: 180px;
+      height: 200px;
       padding: 1rem;
       font-size: 1rem;
       border-radius: 10px;
       border: 1px solid #ccc;
       box-shadow: 0 0 5px rgba(0,0,0,0.05);
-      resize: none;
-      margin-top: 1rem;
+      resize: vertical;
+      background-color: #fff;
     }
 
     footer {
@@ -147,24 +119,28 @@
       color: #666;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 600px) {
       header h1 {
-        font-size: 1.8rem;
+        font-size: 2rem;
       }
 
       section h2 {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
       }
 
       #notepad {
-        height: 140px;
+        height: 160px;
+      }
+
+      .button-group {
+        flex-direction: column;
       }
     }
   </style>
 </head>
 <body>
   <div class="background"></div>
-  <div class="container">
+  <main class="container">
 
     <header>
       <h1>Inner Sanctuary</h1>
@@ -173,9 +149,12 @@
 
     <section id="mindfulness">
       <h2>🌸 Mindful Quotes</h2>
-      <p>Tap the button below to receive gentle inspiration.</p>
+      <p>Tap the button below to receive gentle inspiration. You can share it too!</p>
       <div id="quote">Click the button to begin...</div>
-      <button onclick="generateQuote()">✨ Inspire Me</button>
+      <div class="button-group">
+        <button onclick="generateQuote()">✨ Inspire Me</button>
+        <button onclick="shareQuote()">📤 Share Quote</button>
+      </div>
     </section>
 
     <section id="growth">
@@ -188,10 +167,9 @@
       &copy; 2025 Inner Sanctuary. Breathe. Reflect. Grow.
     </footer>
 
-  </div>
+  </main>
 
   <script>
-    // Quote generator
     const quotes = [
       "You are enough, just as you are.",
       "Peace begins with a deep breath.",
@@ -204,5 +182,32 @@
     ];
 
     function generateQuote() {
-      const quote = quotes[Math.floor(Math.random() * quotes.length)];
-      document.getElementById('quote').textContent = quote
+      const quoteEl = document.getElementById('quote');
+      quoteEl.style.opacity = 0;
+      setTimeout(() => {
+        quoteEl.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+        quoteEl.style.opacity = 1;
+      }, 300);
+    }
+
+    function shareQuote() {
+      const quote = document.getElementById('quote').textContent;
+      if (navigator.share) {
+        navigator.share({
+          title: 'Mindful Quote',
+          text: quote,
+          url: window.location.href
+        }).catch(err => console.log('Share failed:', err));
+      } else {
+        alert("Sharing is not supported on this device.");
+      }
+    }
+
+    const notepad = document.getElementById('notepad');
+    notepad.value = localStorage.getItem('notepad') || '';
+    notepad.addEventListener('input', () => {
+      localStorage.setItem('notepad', notepad.value);
+    });
+  </script>
+</body>
+</html>
