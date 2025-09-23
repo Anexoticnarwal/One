@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Inner Sanctuary</title>
   <style>
+    html {
+      box-sizing: border-box;
+    }
+
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+
     html, body {
       margin: 0;
       padding: 0;
@@ -34,15 +42,15 @@
       100% { background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb'); }
     }
 
-    .container {
+    main.container {
       max-width: 800px;
       margin: auto;
-      padding: 2rem 1rem;
+      padding: 1rem;
     }
 
     header {
       text-align: center;
-      padding: 2rem 1rem;
+      padding: 1rem 0;
     }
 
     header h1 {
@@ -57,11 +65,11 @@
     }
 
     section {
-      background: rgba(255,255,255,0.85);
+      background: rgba(255, 255, 255, 0.6);
       border-radius: 12px;
-      padding: 2rem 1.5rem;
+      padding: 1.5rem 1rem;
       margin-bottom: 2rem;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
     }
 
     section h2 {
@@ -78,7 +86,8 @@
       font-style: italic;
       font-size: 1.2rem;
       margin-top: 1rem;
-      transition: opacity 0.5s ease;
+      opacity: 1;
+      transition: opacity 0.5s ease-in-out;
     }
 
     .button-group {
@@ -107,14 +116,14 @@
       font-size: 1rem;
       border-radius: 10px;
       border: 1px solid #ccc;
-      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+      background-color: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(4px);
       resize: vertical;
-      background-color: #fff;
     }
 
     footer {
       text-align: center;
-      padding: 2rem 1rem;
+      padding: 1rem 0;
       font-size: 0.9rem;
       color: #666;
     }
@@ -187,7 +196,7 @@
       setTimeout(() => {
         quoteEl.textContent = quotes[Math.floor(Math.random() * quotes.length)];
         quoteEl.style.opacity = 1;
-      }, 300);
+      }, 500);
     }
 
     function shareQuote() {
