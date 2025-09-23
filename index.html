@@ -177,8 +177,8 @@
   </footer>
 
   <script>
+    // Floating particles
     window.onload = function() {
-      // Floating particles
       const canvas = document.getElementById('particles');
       const ctx = canvas.getContext('2d');
       let particles = [];
@@ -221,24 +221,25 @@
         requestAnimationFrame(animateParticles);
       }
       animateParticles();
-
-      // Quote generator
-      const quotes = [
-        "You are enough, just as you are.",
-        "Peace begins with a deep breath.",
-        "The obstacle is the path. — Zen Proverb",
-        "Small steps every day lead to big change.",
-        "Your thoughts shape your reality.",
-        "Let go of what no longer serves you.",
-        "Joy is a decision, not a condition.",
-        "Be kind to yourself. You’re doing your best."
-      ];
-
-      window.generateQuote = function() {
-        const quote = quotes[Math.floor(Math.random() * quotes.length)];
-        document.getElementById('quote').textContent = quote;
-      };
     };
+
+    // Quote generator
+    const quotes = [
+      "You are enough, just as you are.",
+      "Peace begins with a deep breath.",
+      "The obstacle is the path. — Zen Proverb",
+      "Small steps every day lead to big change.",
+      "Your thoughts shape your reality.",
+      "Let go of what no longer serves you.",
+      "Joy is a decision, not a condition.",
+      "Be kind to yourself. You’re doing your best."
+    ];
+
+    function generateQuote() {
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      const quoteDiv = document.getElementById('quote');
+      if (quoteDiv) quoteDiv.textContent = quote;
+    }
   </script>
 
 </body>
