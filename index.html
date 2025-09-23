@@ -7,6 +7,9 @@
   <style>
     html {
       box-sizing: border-box;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #2c3e50;
     }
 
     *, *:before, *:after {
@@ -54,14 +57,15 @@
     }
 
     header h1 {
-      font-size: 2.5rem;
-      color: #2c3e50;
-      margin-bottom: 0.5rem;
+      font-size: 3rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 0.3rem;
     }
 
     header p {
-      font-size: 1.1rem;
-      color: #555;
+      font-size: 1.2rem;
+      color: #444;
     }
 
     section {
@@ -73,18 +77,20 @@
     }
 
     section h2 {
-      font-size: 1.6rem;
-      margin-bottom: 1rem;
+      font-size: 1.8rem;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
     }
 
     section p {
-      font-size: 1rem;
-      margin-bottom: 1rem;
+      font-size: 1.05rem;
+      color: #333;
     }
 
     #quote {
+      font-size: 1.3rem;
       font-style: italic;
-      font-size: 1.2rem;
+      color: #1a1a1a;
       margin-top: 1rem;
       opacity: 1;
       transition: opacity 0.5s ease-in-out;
@@ -104,6 +110,8 @@
       background: #2c3e50;
       color: white;
       font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
       cursor: pointer;
       flex: 1;
       min-width: 140px;
@@ -114,6 +122,8 @@
       height: 200px;
       padding: 1rem;
       font-size: 1rem;
+      line-height: 1.5;
+      color: #2c3e50;
       border-radius: 10px;
       border: 1px solid #ccc;
       background-color: rgba(255, 255, 255, 0.5);
@@ -124,21 +134,28 @@
     footer {
       text-align: center;
       padding: 1rem 0;
-      font-size: 0.9rem;
-      color: #666;
+      font-size: 0.95rem;
+      color: #555;
     }
 
     @media (max-width: 600px) {
       header h1 {
-        font-size: 2rem;
+        font-size: 2.2rem;
       }
 
       section h2 {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
+      }
+
+      section p,
+      #quote,
+      footer {
+        font-size: 1rem;
       }
 
       #notepad {
         height: 160px;
+        font-size: 0.95rem;
       }
 
       .button-group {
@@ -153,27 +170,27 @@
 
     <header>
       <h1>Inner Sanctuary</h1>
-      <p>A space for reflection, calm, and clarity</p>
+      <p>Your quiet corner for peace, presence, and personal renewal</p>
     </header>
 
     <section id="mindfulness">
-      <h2>🌸 Mindful Quotes</h2>
-      <p>Tap the button below to receive gentle inspiration. You can share it too!</p>
-      <div id="quote">Click the button to begin...</div>
+      <h2>🌸 Gentle Reminders</h2>
+      <p>Tap below to receive a whisper of wisdom. Let it guide your breath and soften your thoughts.</p>
+      <div id="quote">Begin with a breath…</div>
       <div class="button-group">
-        <button onclick="generateQuote()">✨ Inspire Me</button>
-        <button onclick="shareQuote()">📤 Share Quote</button>
+        <button onclick="generateQuote()">🌟 Show Me Calm</button>
+        <button onclick="shareQuote()">📤 Share This Feeling</button>
       </div>
     </section>
 
     <section id="growth">
-      <h2>📝 Personal Reflections</h2>
-      <p>Write freely. This notepad saves your thoughts locally, so you can return anytime.</p>
+      <h2>📝 Your Reflections</h2>
+      <p>Write what you feel. This space is yours—quiet, private, and always waiting for your return.</p>
       <textarea id="notepad" placeholder="Start writing..."></textarea>
     </section>
 
     <footer>
-      &copy; 2025 Inner Sanctuary. Breathe. Reflect. Grow.
+      &copy; 2025 Inner Sanctuary. Inhale. Reflect. Evolve.
     </footer>
 
   </main>
