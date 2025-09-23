@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wow Site</title>
+  <title>Inner Sanctuary</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: radial-gradient(circle at center, #0f2027, #203a43, #2c5364);
-      color: white;
+      background: linear-gradient(to bottom, #e0f7fa, #f1f8e9);
+      color: #333;
       scroll-behavior: smooth;
-      position: relative;
       overflow-x: hidden;
     }
 
@@ -31,35 +30,23 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb') center/cover no-repeat;
+      background: linear-gradient(to right, #a8edea, #fed6e3);
       position: relative;
       z-index: 1;
     }
 
-    header::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-    }
-
     header h1 {
-      font-size: 4rem;
+      font-size: 3.5rem;
       z-index: 2;
-      text-shadow: 0 0 20px #00f7ff;
-      animation: glow 2s infinite alternate;
+      color: #2c3e50;
+      text-shadow: 0 0 10px rgba(255,255,255,0.6);
     }
 
     header p {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       z-index: 2;
       margin-top: 1rem;
-    }
-
-    @keyframes glow {
-      from { text-shadow: 0 0 10px #00f7ff; }
-      to { text-shadow: 0 0 30px #00f7ff; }
+      color: #555;
     }
 
     section {
@@ -72,60 +59,72 @@
     .card {
       display: block;
       text-decoration: none;
-      color: white;
-      background: rgba(255,255,255,0.1);
+      color: #333;
+      background: rgba(255,255,255,0.8);
       border-radius: 10px;
       padding: 2rem;
       margin: 1rem auto;
       max-width: 600px;
-      box-shadow: 0 0 20px rgba(0,255,255,0.2);
-      transition: transform 0.3s ease, background 0.3s ease;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
       cursor: pointer;
     }
 
     .card:hover {
-      transform: scale(1.05);
-      background: rgba(255,255,255,0.2);
+      transform: scale(1.03);
     }
 
-    .wow-section {
+    .section-pad {
       min-height: 100vh;
       padding: 4rem 2rem;
-      background: linear-gradient(270deg, #111, #222, #333);
-      background-size: 600% 600%;
-      animation: gradientShift 10s ease infinite;
-      color: #eee;
+      background: linear-gradient(to bottom, #fceabb, #f8b500);
+      color: #333;
     }
 
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .wow-section h2 {
+    .section-pad h2 {
       font-size: 2.5rem;
       margin-bottom: 1rem;
-      color: #00f7ff;
     }
 
-    .wow-section p {
+    .section-pad p {
       font-size: 1.2rem;
       max-width: 700px;
       margin: auto;
     }
 
+    #notepad {
+      width: 90%;
+      max-width: 700px;
+      height: 300px;
+      margin-top: 2rem;
+      padding: 1rem;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: none;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      resize: none;
+    }
+
     #quote {
       margin-top: 2rem;
       font-style: italic;
-      color: #0ff;
+      font-size: 1.4rem;
+      color: #2c3e50;
+      transition: opacity 0.5s ease;
+    }
+
+    #quote-carousel {
+      margin-top: 2rem;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: #2c3e50;
     }
 
     footer {
       text-align: center;
       padding: 2rem;
-      background: #000;
-      color: #aaa;
+      background: #f1f8e9;
+      color: #666;
       position: relative;
       z-index: 1;
     }
@@ -136,44 +135,45 @@
   <canvas id="particles"></canvas>
 
   <header>
-    <h1>Welcome to the Wow</h1>
-    <p>A sanctuary for growth, calm, and inspiration</p>
+    <h1>Inner Sanctuary</h1>
+    <p>A space for reflection, calm, and clarity</p>
   </header>
 
   <section>
-    <a href="#wow1" class="card">
-      <h2>🚀 Personal Growth & Self-Discovery</h2>
-      <p>Reflect, set intentions, and explore who you are becoming.</p>
+    <a href="#growth" class="card">
+      <h2>📝 Personal Reflections</h2>
+      <p>Capture your thoughts, dreams, and intentions.</p>
     </a>
-    <a href="#wow2" class="card">
-      <h2>🧠 Mindfulness & Mental Wellness</h2>
-      <p>Practice calm, clarity, and emotional resilience.</p>
+    <a href="#mindfulness" class="card">
+      <h2>🌸 Mindful Quotes</h2>
+      <p>Swipe left or right to receive gentle inspiration.</p>
     </a>
-    <a href="#wow3" class="card">
-      <h2>🎨 Philosophy & Positivity</h2>
-      <p>Timeless wisdom meets radiant optimism.</p>
+    <a href="#philosophy" class="card">
+      <h2>🌞 Wisdom & Positivity</h2>
+      <p>Explore timeless ideas that uplift and illuminate.</p>
     </a>
   </section>
 
-  <section id="wow1" class="wow-section">
-    <h2>🚀 Personal Growth & Self-Discovery</h2>
-    <p>Every journey begins within. This space invites you to reflect, set intentions, and explore who you are becoming. Whether it's journaling, goal-setting, or simply asking “What matters most?”, this is your launchpad for transformation.</p>
+  <section id="growth" class="section-pad">
+    <h2>📝 Personal Reflections</h2>
+    <p>Write freely. This notepad saves your thoughts locally, so you can return anytime.</p>
+    <textarea id="notepad" placeholder="Start writing..."></textarea>
   </section>
 
-  <section id="wow2" class="wow-section">
-    <h2>🧠 Mindfulness & Mental Wellness</h2>
-    <p>Pause. Breathe. Be here. This section offers gentle reminders to care for your mind and spirit — from calming quotes to mindful moments. Tap below to receive a spark of inspiration.</p>
-    <div id="quote">Click to generate a quote</div>
-    <button onclick="generateQuote()" style="margin-top:1rem;padding:10px 20px;">🧘 Inspire Me</button>
+  <section id="mindfulness" class="section-pad" style="background: linear-gradient(to bottom, #d4fc79, #96e6a1);">
+    <h2>🌸 Mindful Quotes</h2>
+    <p>Swipe left or right (or use arrow keys) to reveal a new quote.</p>
+    <div id="quote">Swipe to begin...</div>
   </section>
 
-  <section id="wow3" class="wow-section">
-    <h2>🎨 Philosophy & Positivity</h2>
-    <p>What does it mean to live well? This space blends ancient wisdom with modern joy — celebrating ideas that uplift, challenge, and illuminate. From Stoic strength to Zen simplicity, let your thoughts wander and your heart expand.</p>
+  <section id="philosophy" class="section-pad" style="background: linear-gradient(to bottom, #c2e9fb, #a1c4fd);">
+    <h2>🌞 Wisdom & Positivity</h2>
+    <p>Let ancient insights and modern joy guide your day.</p>
+    <div id="quote-carousel"></div>
   </section>
 
   <footer>
-    &copy; 2025 WowSite. Made to uplift.
+    &copy; 2025 Inner Sanctuary. Breathe. Reflect. Grow.
   </footer>
 
   <script>
@@ -212,7 +212,7 @@
           p.alpha -= 0.01;
           if (p.alpha <= 0) particles.splice(i, 1);
           else {
-            ctx.fillStyle = `rgba(0,255,255,${p.alpha})`;
+            ctx.fillStyle = `rgba(0,150,136,${p.alpha})`;
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             ctx.fill();
@@ -223,7 +223,14 @@
       animateParticles();
     };
 
-    // Quote generator
+    // Notepad save/load
+    const notepad = document.getElementById('notepad');
+    notepad.value = localStorage.getItem('notepad') || '';
+    notepad.addEventListener('input', () => {
+      localStorage.setItem('notepad', notepad.value);
+    });
+
+    // Swipe-based quote generator
     const quotes = [
       "You are enough, just as you are.",
       "Peace begins with a deep breath.",
@@ -234,13 +241,27 @@
       "Joy is a decision, not a condition.",
       "Be kind to yourself. You’re doing your best."
     ];
+    let quoteIndex = 0;
+    const quoteDiv = document.getElementById('quote');
 
-    function generateQuote() {
-      const quote = quotes[Math.floor(Math.random() * quotes.length)];
-      const quoteDiv = document.getElementById('quote');
-      if (quoteDiv) quoteDiv.textContent = quote;
+    function showQuote(index) {
+      quoteDiv.style.opacity = 0;
+      setTimeout(() => {
+        quoteDiv.textContent = quotes[index];
+        quoteDiv.style.opacity = 1;
+      }, 300);
     }
-  </script>
 
-</body>
-</html>
+    function nextQuote() {
+      quoteIndex = (quoteIndex + 1) % quotes.length;
+      showQuote(quoteIndex);
+    }
+
+    function prevQuote() {
+      quoteIndex = (quoteIndex - 1 + quotes.length) % quotes.length;
+      showQuote(quoteIndex);
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') nextQuote();
+      if (e.key === '
