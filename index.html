@@ -11,6 +11,17 @@
       background: radial-gradient(circle at center, #0f2027, #203a43, #2c5364);
       color: white;
       scroll-behavior: smooth;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
     }
 
     header {
@@ -22,6 +33,7 @@
       text-align: center;
       background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb') center/cover no-repeat;
       position: relative;
+      z-index: 1;
     }
 
     header::after {
@@ -34,14 +46,14 @@
 
     header h1 {
       font-size: 4rem;
-      z-index: 1;
+      z-index: 2;
       text-shadow: 0 0 20px #00f7ff;
       animation: glow 2s infinite alternate;
     }
 
     header p {
       font-size: 1.5rem;
-      z-index: 1;
+      z-index: 2;
       margin-top: 1rem;
     }
 
@@ -53,6 +65,8 @@
     section {
       padding: 4rem 2rem;
       text-align: center;
+      position: relative;
+      z-index: 1;
     }
 
     .card {
@@ -77,8 +91,16 @@
     .wow-section {
       min-height: 100vh;
       padding: 4rem 2rem;
-      background: #111;
+      background: linear-gradient(270deg, #111, #222, #333);
+      background-size: 600% 600%;
+      animation: gradientShift 10s ease infinite;
       color: #eee;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .wow-section h2 {
@@ -93,15 +115,25 @@
       margin: auto;
     }
 
+    #quote {
+      margin-top: 2rem;
+      font-style: italic;
+      color: #0ff;
+    }
+
     footer {
       text-align: center;
       padding: 2rem;
       background: #000;
       color: #aaa;
+      position: relative;
+      z-index: 1;
     }
   </style>
 </head>
 <body>
+
+  <canvas id="particles"></canvas>
 
   <header>
     <h1>Welcome to the Wow</h1>
@@ -130,7 +162,9 @@
 
   <section id="wow2" class="wow-section">
     <h2>🧠 Smart Content</h2>
-    <p>From live weather widgets to AI-generated quotes, this section is built to think with you. Add dynamic content, connect APIs, and let your site evolve with your ideas.</p>
+    <p>From live weather widgets to AI-generated quotes, this section is built to think with you.</p>
+    <div id="quote">Click to generate a quote</div>
+    <button onclick="generateQuote()" style="margin-top:1rem;padding:10px 20px;">✨ Inspire Me</button>
   </section>
 
   <section id="wow3" class="wow-section">
@@ -141,6 +175,66 @@
   <footer>
     &copy; 2025 WowSite. Made to impress.
   </footer>
+
+  <script>
+    // Floating particles
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    document.addEventListener('mousemove', e => {
+      for (let i = 0; i < 5; i++) {
+        particles.push({
+          x: e.clientX,
+          y: e.clientY,
+          size: Math.random() * 4 + 1,
+          alpha: 1,
+          dx: (Math.random() - 0.5) * 2,
+          dy: (Math.random() - 0.5) * 2
+        });
+      }
+    });
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, i) => {
+        p.x += p.dx;
+        p.y += p.dy;
+        p.alpha -= 0.01;
+        if (p.alpha <= 0) particles.splice(i, 1);
+        else {
+          ctx.fillStyle = `rgba(0,255,255,${p.alpha})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // Quote generator
+    const quotes = [
+      "The best way to predict the future is to create it.",
+      "Magic is believing in yourself.",
+      "Design is intelligence made visible.",
+      "Creativity takes courage.",
+      "Dream big. Start small. Act now."
+    ];
+
+    function generateQuote() {
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById('quote').textContent = quote;
+    }
+  </script>
 
 </body>
 </html>
