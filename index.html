@@ -137,103 +137,108 @@
 
   <header>
     <h1>Welcome to the Wow</h1>
-    <p>Where design meets magic</p>
+    <p>A sanctuary for growth, calm, and inspiration</p>
   </header>
 
   <section>
     <a href="#wow1" class="card">
-      <h2>🚀 Interactive Design</h2>
-      <p>Hover, glow, and animate — this site responds to you.</p>
+      <h2>🚀 Personal Growth & Self-Discovery</h2>
+      <p>Reflect, set intentions, and explore who you are becoming.</p>
     </a>
     <a href="#wow2" class="card">
-      <h2>🧠 Smart Content</h2>
-      <p>Built to expand with your ideas — add sections, widgets, or even AI.</p>
+      <h2>🧠 Mindfulness & Mental Wellness</h2>
+      <p>Practice calm, clarity, and emotional resilience.</p>
     </a>
     <a href="#wow3" class="card">
-      <h2>🎨 Visual Impact</h2>
-      <p>Parallax backgrounds, glowing text, and smooth transitions make it unforgettable.</p>
+      <h2>🎨 Philosophy & Positivity</h2>
+      <p>Timeless wisdom meets radiant optimism.</p>
     </a>
   </section>
 
   <section id="wow1" class="wow-section">
-    <h2>🚀 Interactive Design</h2>
-    <p>Imagine a site that reacts to your every move — glowing buttons, floating particles, and dark mode toggles. This section is your playground for interactivity and motion.</p>
+    <h2>🚀 Personal Growth & Self-Discovery</h2>
+    <p>Every journey begins within. This space invites you to reflect, set intentions, and explore who you are becoming. Whether it's journaling, goal-setting, or simply asking “What matters most?”, this is your launchpad for transformation.</p>
   </section>
 
   <section id="wow2" class="wow-section">
-    <h2>🧠 Smart Content</h2>
-    <p>From live weather widgets to AI-generated quotes, this section is built to think with you.</p>
+    <h2>🧠 Mindfulness & Mental Wellness</h2>
+    <p>Pause. Breathe. Be here. This section offers gentle reminders to care for your mind and spirit — from calming quotes to mindful moments. Tap below to receive a spark of inspiration.</p>
     <div id="quote">Click to generate a quote</div>
-    <button onclick="generateQuote()" style="margin-top:1rem;padding:10px 20px;">✨ Inspire Me</button>
+    <button onclick="generateQuote()" style="margin-top:1rem;padding:10px 20px;">🧘 Inspire Me</button>
   </section>
 
   <section id="wow3" class="wow-section">
-    <h2>🎨 Visual Impact</h2>
-    <p>Layered parallax, animated gradients, and surreal visuals — this is where design becomes emotion. Make your visitors feel something unforgettable.</p>
+    <h2>🎨 Philosophy & Positivity</h2>
+    <p>What does it mean to live well? This space blends ancient wisdom with modern joy — celebrating ideas that uplift, challenge, and illuminate. From Stoic strength to Zen simplicity, let your thoughts wander and your heart expand.</p>
   </section>
 
   <footer>
-    &copy; 2025 WowSite. Made to impress.
+    &copy; 2025 WowSite. Made to uplift.
   </footer>
 
   <script>
-    // Floating particles
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
+    window.onload = function() {
+      // Floating particles
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    document.addEventListener('mousemove', e => {
-      for (let i = 0; i < 5; i++) {
-        particles.push({
-          x: e.clientX,
-          y: e.clientY,
-          size: Math.random() * 4 + 1,
-          alpha: 1,
-          dx: (Math.random() - 0.5) * 2,
-          dy: (Math.random() - 0.5) * 2
-        });
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
       }
-    });
 
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach((p, i) => {
-        p.x += p.dx;
-        p.y += p.dy;
-        p.alpha -= 0.01;
-        if (p.alpha <= 0) particles.splice(i, 1);
-        else {
-          ctx.fillStyle = `rgba(0,255,255,${p.alpha})`;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fill();
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      document.addEventListener('mousemove', e => {
+        for (let i = 0; i < 5; i++) {
+          particles.push({
+            x: e.clientX,
+            y: e.clientY,
+            size: Math.random() * 4 + 1,
+            alpha: 1,
+            dx: (Math.random() - 0.5) * 2,
+            dy: (Math.random() - 0.5) * 2
+          });
         }
       });
-      requestAnimationFrame(animateParticles);
-    }
-    animateParticles();
 
-    // Quote generator
-    const quotes = [
-      "The best way to predict the future is to create it.",
-      "Magic is believing in yourself.",
-      "Design is intelligence made visible.",
-      "Creativity takes courage.",
-      "Dream big. Start small. Act now."
-    ];
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p, i) => {
+          p.x += p.dx;
+          p.y += p.dy;
+          p.alpha -= 0.01;
+          if (p.alpha <= 0) particles.splice(i, 1);
+          else {
+            ctx.fillStyle = `rgba(0,255,255,${p.alpha})`;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
+        requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
 
-    function generateQuote() {
-      const quote = quotes[Math.floor(Math.random() * quotes.length)];
-      document.getElementById('quote').textContent = quote;
-    }
+      // Quote generator
+      const quotes = [
+        "You are enough, just as you are.",
+        "Peace begins with a deep breath.",
+        "The obstacle is the path. — Zen Proverb",
+        "Small steps every day lead to big change.",
+        "Your thoughts shape your reality.",
+        "Let go of what no longer serves you.",
+        "Joy is a decision, not a condition.",
+        "Be kind to yourself. You’re doing your best."
+      ];
+
+      window.generateQuote = function() {
+        const quote = quotes[Math.floor(Math.random() * quotes.length)];
+        document.getElementById('quote').textContent = quote;
+      };
+    };
   </script>
 
 </body>
