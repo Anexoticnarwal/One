@@ -8,7 +8,7 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom, #e0f7fa, #f1f8e9);
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb') center/cover no-repeat fixed;
       color: #333;
       scroll-behavior: smooth;
       overflow-x: hidden;
@@ -30,7 +30,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      background: linear-gradient(to right, #a8edea, #fed6e3);
+      background: rgba(255,255,255,0.8);
       position: relative;
       z-index: 1;
     }
@@ -54,13 +54,14 @@
       text-align: center;
       position: relative;
       z-index: 1;
+      background: rgba(255,255,255,0.85);
     }
 
     .card {
       display: block;
       text-decoration: none;
       color: #333;
-      background: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.9);
       border-radius: 10px;
       padding: 2rem;
       margin: 1rem auto;
@@ -72,13 +73,6 @@
 
     .card:hover {
       transform: scale(1.03);
-    }
-
-    .section-pad {
-      min-height: 100vh;
-      padding: 4rem 2rem;
-      background: linear-gradient(to bottom, #fceabb, #f8b500);
-      color: #333;
     }
 
     .section-pad h2 {
@@ -113,17 +107,10 @@
       transition: opacity 0.5s ease;
     }
 
-    #quote-carousel {
-      margin-top: 2rem;
-      font-style: italic;
-      font-size: 1.2rem;
-      color: #2c3e50;
-    }
-
     footer {
       text-align: center;
       padding: 2rem;
-      background: #f1f8e9;
+      background: rgba(255,255,255,0.9);
       color: #666;
       position: relative;
       z-index: 1;
@@ -140,18 +127,20 @@
   </header>
 
   <section>
-    <a href="#growth" class="card">
-      <h2>📝 Personal Reflections</h2>
-      <p>Capture your thoughts, dreams, and intentions.</p>
-    </a>
     <a href="#mindfulness" class="card">
       <h2>🌸 Mindful Quotes</h2>
       <p>Swipe left or right to receive gentle inspiration.</p>
     </a>
-    <a href="#philosophy" class="card">
-      <h2>🌞 Wisdom & Positivity</h2>
-      <p>Explore timeless ideas that uplift and illuminate.</p>
+    <a href="#growth" class="card">
+      <h2>📝 Personal Reflections</h2>
+      <p>Capture your thoughts, dreams, and intentions.</p>
     </a>
+  </section>
+
+  <section id="mindfulness" class="section-pad">
+    <h2>🌸 Mindful Quotes</h2>
+    <p>Swipe left or right (or use arrow keys) to reveal a new quote.</p>
+    <div id="quote">Swipe to begin...</div>
   </section>
 
   <section id="growth" class="section-pad">
@@ -160,25 +149,13 @@
     <textarea id="notepad" placeholder="Start writing..."></textarea>
   </section>
 
-  <section id="mindfulness" class="section-pad" style="background: linear-gradient(to bottom, #d4fc79, #96e6a1);">
-    <h2>🌸 Mindful Quotes</h2>
-    <p>Swipe left or right (or use arrow keys) to reveal a new quote.</p>
-    <div id="quote">Swipe to begin...</div>
-  </section>
-
-  <section id="philosophy" class="section-pad" style="background: linear-gradient(to bottom, #c2e9fb, #a1c4fd);">
-    <h2>🌞 Wisdom & Positivity</h2>
-    <p>Let ancient insights and modern joy guide your day.</p>
-    <div id="quote-carousel"></div>
-  </section>
-
   <footer>
     &copy; 2025 Inner Sanctuary. Breathe. Reflect. Grow.
   </footer>
 
   <script>
-    // Floating particles
     window.onload = function() {
+      // Floating particles
       const canvas = document.getElementById('particles');
       const ctx = canvas.getContext('2d');
       let particles = [];
@@ -221,47 +198,68 @@
         requestAnimationFrame(animateParticles);
       }
       animateParticles();
+
+      // Notepad save/load
+      const notepad = document.getElementById('notepad');
+      notepad.value = localStorage.getItem('notepad') || '';
+      notepad.addEventListener('input', () => {
+        localStorage.setItem('notepad', notepad.value);
+      });
+
+      // Mindful Quotes
+      const quotes = [
+        "You are enough, just as you are.",
+        "Peace begins with a deep breath.",
+        "The obstacle is the path. — Zen Proverb",
+        "Small steps every day lead to big change.",
+        "Your thoughts shape your reality.",
+        "Let go of what no longer serves you.",
+        "Joy is a decision, not a condition.",
+        "Be kind to yourself. You’re doing your best."
+      ];
+      let quoteIndex = 0;
+      const quoteDiv = document.getElementById('quote');
+
+      function showQuote(index) {
+        quoteDiv.style.opacity = 0;
+        setTimeout(() => {
+          quoteDiv.textContent = quotes[index];
+          quoteDiv.style.opacity = 1;
+        }, 300);
+      }
+
+      showQuote(quoteIndex);
+
+      function nextQuote() {
+        quoteIndex = (quoteIndex + 1) % quotes.length;
+        showQuote(quoteIndex);
+      }
+
+      function prevQuote() {
+        quoteIndex = (quoteIndex - 1 + quotes.length) % quotes.length;
+        showQuote(quoteIndex);
+      }
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight') nextQuote();
+        if (e.key === 'ArrowLeft') prevQuote();
+      });
+
+      let touchStartX = null;
+      document.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+
+      document.addEventListener('touchend', e => {
+        const touchEndX = e.changedTouches[0].screenX;
+        if (touchStartX !== null) {
+          if (touchEndX < touchStartX - 50) nextQuote();
+          else if (touchEndX > touchStartX + 50) prevQuote();
+          touchStartX = null;
+        }
+      });
     };
+  </script>
 
-    // Notepad save/load
-    const notepad = document.getElementById('notepad');
-    notepad.value = localStorage.getItem('notepad') || '';
-    notepad.addEventListener('input', () => {
-      localStorage.setItem('notepad', notepad.value);
-    });
-
-    // Swipe-based quote generator
-    const quotes = [
-      "You are enough, just as you are.",
-      "Peace begins with a deep breath.",
-      "The obstacle is the path. — Zen Proverb",
-      "Small steps every day lead to big change.",
-      "Your thoughts shape your reality.",
-      "Let go of what no longer serves you.",
-      "Joy is a decision, not a condition.",
-      "Be kind to yourself. You’re doing your best."
-    ];
-    let quoteIndex = 0;
-    const quoteDiv = document.getElementById('quote');
-
-    function showQuote(index) {
-      quoteDiv.style.opacity = 0;
-      setTimeout(() => {
-        quoteDiv.textContent = quotes[index];
-        quoteDiv.style.opacity = 1;
-      }, 300);
-    }
-
-    function nextQuote() {
-      quoteIndex = (quoteIndex + 1) % quotes.length;
-      showQuote(quoteIndex);
-    }
-
-    function prevQuote() {
-      quoteIndex = (quoteIndex - 1 + quotes.length) % quotes.length;
-      showQuote(quoteIndex);
-    }
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowRight') nextQuote();
-      if (e.key === '
+</body>
+</html>
