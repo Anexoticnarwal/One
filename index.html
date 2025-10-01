@@ -5,11 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Inner Sanctuary</title>
   <style>
+    :root {
+      --primary-color: #2c3e50;
+      --text-color: #1a1a1a;
+      --overlay-color: rgba(0, 0, 0, 0.2);
+    }
+
     html {
       box-sizing: border-box;
       font-size: 16px;
       line-height: 1.6;
-      color: #1a1a1a;
+      color: var(--text-color);
     }
 
     *, *:before, *:after {
@@ -34,21 +40,34 @@
       background-size: cover;
       background-position: center;
       animation: natureCycle 120s infinite;
+      transition: background-image 1s ease-in-out;
+      z-index: -2;
+    }
+
+    .background::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--overlay-color);
       z-index: -1;
     }
 
     @keyframes natureCycle {
-      0%   { background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb'); }
-      25%  { background-image: url('https://images.unsplash.com/photo-1503264116251-35a269479413'); }
-      50%  { background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9'); }
-      75%  { background-image: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee'); }
-      100% { background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb'); }
+      0%   { background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1080&q=80'); }
+      25%  { background-image: url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1080&q=80'); }
+      50%  { background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1080&q=80'); }
+      75%  { background-image: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1080&q=80'); }
+      100% { background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1080&q=80'); }
     }
 
     main.container {
       max-width: 800px;
       margin: auto;
       padding: 1rem;
+      position: relative;
+      z-index: 1;
     }
 
     header {
@@ -57,7 +76,7 @@
     }
 
     header h1 {
-      font-size: 4rem;
+      font-size: clamp(2rem, 6vw, 4rem);
       font-weight: 900;
       color: #ffffff;
       text-shadow: 0 0 10px rgba(255,255,255,0.6);
@@ -73,14 +92,14 @@
     }
 
     section h2 {
-      font-size: 2rem;
+      font-size: clamp(1.6rem, 4vw, 2rem);
       font-weight: 600;
       margin-bottom: 1rem;
       color: #222;
     }
 
     #quote {
-      font-size: 2rem;
+      font-size: clamp(1.6rem, 5vw, 2rem);
       font-style: italic;
       font-weight: 500;
       color: #fff;
@@ -100,7 +119,7 @@
       padding: 14px 20px;
       border: none;
       border-radius: 6px;
-      background: #2c3e50;
+      background: var(--primary-color);
       color: white;
       font-size: 1rem;
       font-weight: 500;
@@ -114,7 +133,7 @@
       height: 320px;
       padding: 1rem;
       font-size: 1.1rem;
-      color: #1a1a1a;
+      color: var(--text-color);
       border-radius: 10px;
       border: 1px solid #ccc;
       background-color: rgba(255, 255, 255, 0.4);
@@ -130,26 +149,40 @@
     }
 
     @media (max-width: 600px) {
-      header h1 {
-        font-size: 2.8rem;
-      }
-
-      section h2 {
-        font-size: 1.6rem;
-      }
-
-      #quote {
-        font-size: 1.6rem;
+      .button-group {
+        flex-direction: column;
       }
 
       #notepad {
         height: 240px;
         font-size: 1rem;
       }
+    }
 
-      .button-group {
-        flex-direction: column;
+    @media (max-width: 400px) {
+      section {
+        padding: 1.5rem 1rem;
       }
+
+      button {
+        font-size: 0.9rem;
+        padding: 12px 16px;
+      }
+    }
+
+    .breathing-circle {
+      width: 120px;
+      height: 120px;
+      margin: 2rem auto;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      animation: breathe 8s ease-in-out infinite;
+      box-shadow: 0 0 20px rgba(255,255,255,0.4);
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.5); }
     }
   </style>
 </head>
@@ -165,14 +198,20 @@
       <h2>🌸 Inspire</h2>
       <div id="quote">Begin with a breath…</div>
       <div class="button-group">
-        <button onclick="generateQuote()">✨ New Quote</button>
-        <button onclick="shareQuote()">📤 Share</button>
+        <button onclick="generateQuote()" aria-label="Generate a new inspirational quote">✨ New Quote</button>
+        <button onclick="shareQuote()" aria-label="Share the current quote">📤 Share</button>
       </div>
     </section>
 
     <section id="growth">
       <h2>📝 Reflect</h2>
       <textarea id="notepad" placeholder="Write freely..."></textarea>
+    </section>
+
+    <section id="breathe">
+      <h2>🌬️ Breathe</h2>
+      <div class="breathing-circle" aria-label="Guided breathing animation"></div>
+      <p style="text-align:center; color:#fff; font-size:1rem;">Follow the circle: inhale as it expands, exhale as it contracts.</p>
     </section>
 
     <footer>
@@ -182,40 +221,27 @@
   </main>
 
   <script>
-    const quotes = [
-      "You are enough.",
-      "Breathe deeply.",
-      "Stillness speaks.",
-      "Let go of what weighs you down.",
-      "Joy is a choice.",
-      "Be kind to yourself.",
-      "Small steps matter.",
-      "The path is within.",
-      "Peace I leave with you; my peace I give you. — John 14:27",
-      "Be still, and know that I am God. — Psalm 46:10",
-      "The wound is the place where the light enters you. — Rumi",
-      "Inhale courage, exhale fear.",
-      "God is within her, she will not fall. — Psalm 46:5",
-      "The quieter you become, the more you can hear. — Ram Dass",
-      "Faith is taking the first step even when you don’t see the whole staircase. — MLK Jr.",
-      "Let your heart be light.",
-      "You are held, even when you feel alone.",
-      "This too shall pass.",
-      "Grace is enough.",
-      "The soul always knows what to do to heal itself.",
-      "Cast all your anxiety on Him because He cares for you. — 1 Peter 5:7",
-      "Even the darkest night will end and the sun will rise. — Victor Hugo",
-      "The light shines in the darkness, and the darkness has not overcome it. — John 1:5"
-    ];
-
-    let remainingQuotes = [...quotes];
-
     function generateQuote() {
       const quoteEl = document.getElementById('quote');
-      if (remainingQuotes.length === 0) remainingQuotes = [...quotes];
-      const index = Math.floor(Math.random() * remainingQuotes.length);
-      const quote = remainingQuotes.splice(index, 1)[0];
       quoteEl.style.opacity = 0;
+
+      const themes = [
+        "peace", "courage", "light", "grace", "stillness", "faith", "hope", "love", "joy", "healing"
+      ];
+      const verbs = [
+        "embrace", "breathe in", "trust", "let go of", "welcome", "honor", "listen to", "follow", "receive", "remember"
+      ];
+      const affirmations = [
+        "You are enough.", "You are held.", "You are loved.", "You are safe.", "You are strong.",
+        "You are light.", "You are growing.", "You are healing.", "You are becoming.", "You are whole."
+      ];
+
+      const theme = themes[Math.floor(Math.random() * themes.length)];
+      const verb = verbs[Math.floor(Math.random() * verbs.length)];
+      const affirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
+
+      const quote = `${affirmation} ${verb} the ${theme}.`;
+
       setTimeout(() => {
         quoteEl.textContent = quote;
         quoteEl.style.opacity = 1;
@@ -223,23 +249,4 @@
     }
 
     function shareQuote() {
-      const quote = document.getElementById('quote').textContent;
-      if (navigator.share) {
-        navigator.share({
-          title: 'Mindful Quote',
-          text: quote,
-          url: window.location.href
-        }).catch(err => console.log('Share failed:', err));
-      } else {
-        alert("Sharing is not supported on this device.");
-      }
-    }
-
-    const notepad = document.getElementById('notepad');
-    notepad.value = localStorage.getItem('notepad') || '';
-    notepad.addEventListener('input', () => {
-      localStorage.setItem('notepad', notepad.value);
-    });
-  </script>
-</body>
-</html>
+     
