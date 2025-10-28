@@ -1,238 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Inner Sanctuary</title>
   <style>
-    html {
-      box-sizing: border-box;
-      font-size: 16px;
-      line-height: 1.6;
-      color: #1a1a1a;
+    :root{
+      --max-width:900px;
+      --bg-opacity:0.64;
+      --card-bg: rgba(255,255,255,var(--bg-opacity));
+      --accent:#2c3e50;
+      --muted:#4a6276;
+      --radius:12px;
+      --gap:14px;
+      --touch:16px;
     }
 
-    *, *:before, *:after {
-      box-sizing: inherit;
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Segoe UI',system-ui,-apple-system,Helvetica,Arial,sans-serif;background:linear-gradient(180deg, rgba(255,255,255,0.72), rgba(250,250,250,0.72));-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+    .background{position:fixed;inset:0;background-size:cover;background-position:center;z-index:-1;filter:saturate(0.96) brightness(0.9);pointer-events:none;transition:background-image 1s ease-in-out}
+    /* overlay to ensure contrast on mobile */
+    .bg-overlay{position:fixed;inset:0;background:linear-gradient(180deg, rgba(10,10,10,0.08), rgba(10,10,10,0.14));z-index:-1;pointer-events:none}
+
+    main{max-width:var(--max-width);margin:1.25rem auto;padding:1rem;display:flex;flex-direction:column;gap:var(--gap)}
+
+    header{text-align:center;padding:0.5rem 0}
+    header h1{margin:0;font-size:clamp(2rem,6vw,3.6rem);color:white;font-weight:900;text-shadow:0 6px 18px rgba(0,0,0,0.5);line-height:1}
+
+    .card{background:var(--card-bg);border-radius:var(--radius);padding:1rem;box-shadow:0 8px 26px rgba(15,23,30,0.08)}
+    .stack{display:flex;gap:var(--gap);align-items:flex-start}
+    .col{flex:1;min-width:0}
+
+    /* Quote area */
+    #mindfulness .controls{display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.85rem}
+    .btn{appearance:none;border:0;border-radius:10px;padding:12px 14px;background:var(--accent);color:#fff;font-weight:700;cursor:pointer;min-height:48px;display:inline-flex;align-items:center;justify-content:center;font-size:1rem;flex:1;min-width:120px;touch-action:manipulation}
+    .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(44,62,80,0.08)}
+    .btn.secondary{background:var(--muted)}
+    .btn:active{transform:translateY(1px)}
+    .btn:focus{outline:3px solid rgba(44,62,80,0.18);outline-offset:2px}
+
+    #quote{font-size:clamp(1.1rem,3.4vw,1.6rem);font-style:italic;color:#0b0b0b;min-height:88px;transition:opacity 0.36s ease,transform 0.36s ease;padding:0.25rem}
+
+    textarea#notepad{width:100%;height:260px;padding:12px;border-radius:10px;border:1px solid #d6d6d6;background:rgba(255,255,255,0.9);resize:vertical;font-size:1rem;line-height:1.5}
+
+    footer{font-size:0.9rem;text-align:center;color:#444;padding:0.5rem 0}
+
+    /* Group chat */
+    #groupChatArea{display:flex;flex-direction:column;gap:0.6rem}
+    #chatLog{height:260px;overflow:auto;padding:12px;border-radius:10px;border:1px solid #e6e6e6;background:linear-gradient(180deg,#fff,#fbfbfb);font-size:0.95rem}
+    .chat-msg{padding:8px 10px;margin-bottom:8px;border-radius:8px;max-width:86%;}
+    .chat-msg.me{background:#e9f0ff;margin-left:auto;color:#0b2540}
+    .chat-msg.other{background:#f3f3f3;color:#0b0b0b;margin-right:auto}
+    #chatInputWrap{display:flex;gap:8px}
+    #chatInput{flex:1;padding:10px;border-radius:10px;border:1px solid #d6d6d6;font-size:1rem}
+    #sendChat{padding:10px 12px;border-radius:10px;background:var(--accent);color:#fff;border:0;font-weight:700;min-width:84px}
+
+    /* signaling UI */
+    .signal{display:flex;flex-direction:column;gap:0.5rem}
+    .signal textarea{min-height:84px;font-size:0.9rem;padding:8px;border-radius:8px;border:1px solid #ddd}
+
+    /* responsive: mobile-first */
+    @media(min-width:880px){
+      .stack{flex-direction:row}
+      .col{min-width:0}
+      #mindfulness{min-width:44%}
     }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
-      overflow-x: hidden;
-      min-height: 100%;
-      background-color: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(6px);
+    @media(max-width:420px){
+      .btn{font-size:0.98rem;padding:14px 12px;min-height:56px;border-radius:12px}
+      textarea#notepad{height:200px}
+      #chatLog{height:200px}
     }
 
-    /* background container */
-    .background {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      background-attachment: fixed;
-      background-size: cover;
-      background-position: center;
-      animation: natureCycle 120s infinite linear;
-      z-index: -1;
-      filter: saturate(0.95) brightness(0.9);
-    }
-
-    @keyframes natureCycle {
-      0%   { background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=60'); }
-      25%  { background-image: url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1600&q=60'); }
-      50%  { background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1600&q=60'); }
-      75%  { background-image: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=60'); }
-      100% { background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=60'); }
-    }
-
-    main.container {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 1rem;
-    }
-
-    header {
-      text-align: center;
-      padding: 0.5rem 0;
-    }
-
-    header h1 {
-      font-size: 4rem;
-      font-weight: 900;
-      color: #ffffff;
-      text-shadow: 0 0 10px rgba(0,0,0,0.6);
-      margin: 0;
-      line-height: 1;
-    }
-
-    section {
-      background: rgba(255, 255, 255, 0.6);
-      border-radius: 12px;
-      padding: 2rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-      color: #111;
-    }
-
-    section h2 {
-      font-size: 1.8rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: #222;
-    }
-
-    #quote {
-      font-size: 1.6rem;
-      font-style: italic;
-      font-weight: 500;
-      color: #0b0b0b;
-      min-height: 96px;
-      transition: opacity 0.45s ease-in-out, transform 0.45s ease-in-out;
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .button-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 1.25rem;
-      align-items: center;
-    }
-
-    button {
-      padding: 12px 16px;
-      border: none;
-      border-radius: 8px;
-      background: #2c3e50;
-      color: white;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      flex: 1;
-      min-width: 120px;
-      transition: background 0.18s ease, transform 0.08s ease;
-    }
-
-    button.secondary {
-      background: #4a6276;
-    }
-
-    button.ghost {
-      background: rgba(44,62,80,0.08);
-      color: #2c3e50;
-      font-weight: 600;
-      border: 1px solid rgba(44,62,80,0.08);
-    }
-
-    button:active { transform: translateY(1px); }
-
-    /* Focus styles for accessibility */
-    :focus {
-      outline: none;
-    }
-
-    button:focus, textarea:focus, #quote:focus {
-      outline: 3px solid rgba(44,62,80,0.18);
-      outline-offset: 2px;
-    }
-
-    #notepad {
-      width: 100%;
-      height: 320px;
-      padding: 1rem;
-      font-size: 1.05rem;
-      color: #111;
-      border-radius: 10px;
-      border: 1px solid #cfcfcf;
-      background-color: rgba(255, 255, 255, 0.6);
-      resize: vertical;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
-    }
-
-    footer {
-      text-align: center;
-      padding: 0.5rem 0;
-      font-size: 0.9rem;
-      color: #444;
-    }
-
-    /* responsive */
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 2.6rem;
-      }
-
-      section h2 {
-        font-size: 1.4rem;
-      }
-
-      #quote {
-        font-size: 1.2rem;
-      }
-
-      #notepad {
-        height: 240px;
-        font-size: 1rem;
-      }
-
-      .button-group {
-        flex-direction: column;
-      }
-    }
-
-    /* Respect reduced motion preference */
-    @media (prefers-reduced-motion: reduce) {
-      .background { animation: none; }
-      #quote { transition: none; }
-      button { transition: none; }
-    }
-
-    /* ensure background sits behind page and doesn't capture pointer events */
-    .background, .background::before {
-      pointer-events: none;
+    @media(prefers-reduced-motion:reduce){
+      .background{transition:none}
+      #quote{transition:none}
     }
   </style>
 </head>
 <body>
-  <div class="background" aria-hidden="true"></div>
+  <div class="background" id="bg" aria-hidden="true"></div>
+  <div class="bg-overlay" aria-hidden="true"></div>
 
-  <main class="container" id="mainContent">
-
+  <main>
     <header>
       <h1>Inner Sanctuary</h1>
     </header>
 
-    <section id="mindfulness">
-      <h2>🌸 Inspire</h2>
+    <section id="mindfulness" class="card col">
+      <h2 style="margin:0 0 0.6rem 0;font-size:1.1rem">🌸 Inspire</h2>
       <div id="quote" role="status" aria-live="polite" aria-atomic="true" tabindex="0">Begin with a breath…</div>
-      <div class="button-group" role="toolbar" aria-label="Quote actions">
-        <button type="button" id="newQuoteBtn" aria-label="Generate new quote">✨ New Quote</button>
-        <button type="button" id="copyQuoteBtn" class="secondary" aria-label="Copy quote to clipboard">📋 Copy Quote</button>
-        <button type="button" id="shareQuoteBtn" class="ghost" aria-label="Share quote">📤 Share</button>
+
+      <div class="controls" role="toolbar" aria-label="Quote actions">
+        <button type="button" class="btn" id="newQuoteBtn">✨ New Quote</button>
+        <button type="button" class="btn ghost" id="shareQuoteBtn">📤 Share</button>
       </div>
     </section>
 
-    <section id="growth">
-      <h2>📝 Reflect</h2>
+    <section id="growth" class="card col">
+      <h2 style="margin:0 0 0.6rem 0;font-size:1.1rem">📝 Reflect</h2>
       <textarea id="notepad" placeholder="Write freely..." aria-label="Personal notepad"></textarea>
-      <div class="button-group" style="margin-top:0.75rem;">
-        <button type="button" id="clearNotepadBtn" class="ghost" aria-label="Reset notepad">🧹 Reset Notepad</button>
+      <div style="display:flex;gap:0.6rem;margin-top:0.6rem">
+        <button type="button" class="btn ghost" id="clearNotepadBtn">🧹 Reset Notepad</button>
         <div style="flex:1"></div>
       </div>
     </section>
 
-    <footer>
-      &copy; 2025 Inner Sanctuary
-    </footer>
+    <section id="groupChat" class="card col">
+      <h2 style="margin:0 0 0.6rem 0;font-size:1.1rem">💬 Group Chat (Peer-to-peer)</h2>
 
+      <div id="groupChatArea">
+        <div id="chatLog" aria-live="polite" role="log"></div>
+
+        <div id="chatInputWrap">
+          <input id="chatInput" placeholder="Type a message" aria-label="Chat message" />
+          <button id="sendChat" aria-label="Send chat">Send</button>
+        </div>
+
+        <details>
+          <summary style="cursor:pointer">Connection & Signaling (manual copy/paste)</summary>
+          <div class="signal" style="margin-top:8px">
+            <div>
+              <button type="button" class="btn secondary" id="createOfferBtn">Create Offer (Host)</button>
+              <button type="button" class="btn ghost" id="createAnswerBtn">Create Answer (Joiner)</button>
+            </div>
+
+            <label style="font-size:0.9rem">Local Signal (copy to peer)</label>
+            <textarea id="localSignal" readonly></textarea>
+
+            <label style="font-size:0.9rem">Remote Signal (paste from peer)</label>
+            <textarea id="remoteSignal" placeholder="Paste remote offer/answer here"></textarea>
+
+            <div style="display:flex;gap:8px">
+              <button type="button" class="btn" id="applyRemoteBtn">Apply Remote Signal</button>
+              <button type="button" class="btn ghost" id="resetConnectionBtn">Reset Connection</button>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <footer>&copy; 2025 Inner Sanctuary</footer>
   </main>
 
   <script>
-    (function () {
+    (function(){
+      /* Background images: extended list, optimized width & quality */
+      const backgrounds = [
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=60",
+        "https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1600&q=60",
+        "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1600&q=60",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=60",
+        "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=60",
+        "https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?auto=format&fit=crop&w=1600&q=60",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=60",
+        "https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1600&q=60",
+        "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=60",
+        "https://images.unsplash.com/photo-1454789548928-9efd52dc4031?auto=format&fit=crop&w=1600&q=60",
+        "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1600&q=60"
+      ];
+
+      const bgEl = document.getElementById('bg');
+
+      /* randomize and cycle */
+      let bgIndex = 0;
+      const order = shuffle([...Array(backgrounds.length).keys()]);
+      function setBg(i){
+        bgEl.style.backgroundImage = `url('${backgrounds[order[i % order.length]]}')`;
+      }
+
+      function cycleBg(){
+        setBg(bgIndex++);
+      }
+
+      /* respect reduced motion */
+      const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(!reduced){
+        cycleBg();
+        setInterval(cycleBg, 14000 + Math.floor(Math.random()*8000)); // variable interval 14-22s
+      } else {
+        // set a single background for reduced motion users
+        setBg(0);
+      }
+
+      /* Utility shuffle */
+      function shuffle(arr){
+        for(let i=arr.length-1;i>0;i--){
+          const j = Math.floor(Math.random()*(i+1));
+          [arr[i],arr[j]]=[arr[j],arr[i]];
+        }
+        return arr;
+      }
+
+      /* Quotes and quote rotation without repeats */
       const quotes = [
         "You are enough.",
         "Breathe deeply.",
@@ -259,166 +220,201 @@
         "The light shines in the darkness, and the darkness has not overcome it. — John 1:5"
       ];
 
-      let remainingQuotes = [...quotes];
-
+      let remaining = [...quotes];
       const quoteEl = document.getElementById('quote');
       const newQuoteBtn = document.getElementById('newQuoteBtn');
-      const shareQuoteBtn = document.getElementById('shareQuoteBtn');
-      const copyQuoteBtn = document.getElementById('copyQuoteBtn');
-      const notepad = document.getElementById('notepad');
-      const clearNotepadBtn = document.getElementById('clearNotepadBtn');
+      const shareBtn = document.getElementById('shareQuoteBtn');
 
-      function pickRandomQuote() {
-        if (remainingQuotes.length === 0) remainingQuotes = [...quotes];
-        const index = Math.floor(Math.random() * remainingQuotes.length);
-        return remainingQuotes.splice(index, 1)[0];
+      function pickQuote(){
+        if(remaining.length===0) remaining=[...quotes];
+        const idx = Math.floor(Math.random()*remaining.length);
+        return remaining.splice(idx,1)[0];
       }
 
-      function animateQuoteChange(newText) {
+      function showQuote(text){
         const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (prefersReduced) {
-          quoteEl.textContent = newText;
+        if(prefersReduced){
+          quoteEl.textContent = text;
           return;
         }
         quoteEl.style.opacity = '0';
-        quoteEl.style.transform = 'translateY(6px)';
-        setTimeout(() => {
-          quoteEl.textContent = newText;
+        quoteEl.style.transform = 'translateY(8px)';
+        setTimeout(()=>{
+          quoteEl.textContent = text;
           quoteEl.style.opacity = '1';
           quoteEl.style.transform = 'translateY(0)';
           quoteEl.focus();
-        }, 280);
+        },240);
       }
 
-      function generateQuote() {
-        const quote = pickRandomQuote();
-        animateQuoteChange(quote);
-      }
+      newQuoteBtn.addEventListener('click', ()=> showQuote(pickQuote()));
 
-      async function shareQuote() {
-        const quote = quoteEl.textContent || '';
-        const pageUrl = window.location.href;
-        if (navigator.share) {
-          try {
-            await navigator.share({
-              title: 'Mindful Quote',
-              text: quote,
-              url: pageUrl
-            });
-          } catch (err) {
-            console.log('Share failed', err);
-          }
+      /* Share: Web Share API or clipboard fallback */
+      shareBtn.addEventListener('click', async ()=>{
+        const text = quoteEl.textContent || '';
+        const url = window.location.href;
+        if(navigator.share){
+          try{ await navigator.share({title:'Mindful Quote', text, url}); }catch(e){ console.log('share failed',e); }
           return;
         }
-        // fallback: copy to clipboard with url appended
-        const payload = `${quote}\n${pageUrl}`;
-        try {
-          if (navigator.clipboard && navigator.clipboard.writeText) {
+        const payload = `${text}\n${url}`;
+        try{
+          if(navigator.clipboard && navigator.clipboard.writeText){
             await navigator.clipboard.writeText(payload);
             alert('Quote and link copied to clipboard');
           } else {
-            // older fallback
-            const textarea = document.createElement('textarea');
-            textarea.value = payload;
-            textarea.style.position = 'fixed';
-            textarea.style.left = '-9999px';
-            document.body.appendChild(textarea);
-            textarea.select();
-            try {
-              document.execCommand('copy');
-              alert('Quote and link copied to clipboard');
-            } catch {
-              alert('Sharing is not supported on this device.');
-            } finally {
-              document.body.removeChild(textarea);
-            }
+            const ta = document.createElement('textarea');
+            ta.value = payload; ta.style.position='fixed';ta.style.left='-9999px';
+            document.body.appendChild(ta); ta.select();
+            try{ document.execCommand('copy'); alert('Quote and link copied to clipboard'); } catch { alert('Sharing not supported'); }
+            document.body.removeChild(ta);
           }
-        } catch (err) {
-          console.log('Clipboard failed', err);
-          alert('Sharing is not supported on this device.');
+        }catch(e){ console.log('clipboard failed', e); alert('Sharing not supported'); }
+      });
+
+      /* Notepad persistence */
+      const NOTEPAD_KEY = 'inner_sanctuary_notepad_v2';
+      const notepad = document.getElementById('notepad');
+      const clearNotepadBtn = document.getElementById('clearNotepadBtn');
+      notepad.value = localStorage.getItem(NOTEPAD_KEY) || '';
+      notepad.addEventListener('input', ()=> localStorage.setItem(NOTEPAD_KEY, notepad.value));
+      clearNotepadBtn.addEventListener('click', ()=>{
+        if(confirm('Reset your notepad? This will remove saved content.')){ notepad.value=''; localStorage.removeItem(NOTEPAD_KEY); notepad.focus(); }
+      });
+
+      /* Basic keyboard shortcuts */
+      document.addEventListener('keydown', (e)=>{
+        if(e.altKey||e.ctrlKey||e.metaKey) return;
+        if(e.key==='a' || e.key==='A'){ e.preventDefault(); showQuote(pickQuote()); }
+      });
+
+      /* Group Chat: Simple peer-to-peer via WebRTC DataChannel with manual signaling */
+      const createOfferBtn = document.getElementById('createOfferBtn');
+      const createAnswerBtn = document.getElementById('createAnswerBtn');
+      const localSignal = document.getElementById('localSignal');
+      const remoteSignal = document.getElementById('remoteSignal');
+      const applyRemoteBtn = document.getElementById('applyRemoteBtn');
+      const resetConnBtn = document.getElementById('resetConnectionBtn');
+
+      const chatLog = document.getElementById('chatLog');
+      const chatInput = document.getElementById('chatInput');
+      const sendChat = document.getElementById('sendChat');
+
+      let pc = null;
+      let dc = null;
+      const pcConfig = {iceServers: [{urls:['stun:stun.l.google.com:19302']}]};
+
+      function appendMessage(text, fromMe=false){
+        const div = document.createElement('div');
+        div.className = 'chat-msg ' + (fromMe ? 'me' : 'other');
+        div.textContent = text;
+        chatLog.appendChild(div);
+        chatLog.scrollTop = chatLog.scrollHeight;
+      }
+
+      function resetConnection(){
+        if(dc){ try{ dc.close(); }catch{} dc=null; }
+        if(pc){ try{ pc.close(); }catch{} pc=null; }
+        localSignal.value = '';
+        remoteSignal.value = '';
+        appendMessage('Connection reset', false);
+      }
+
+      function makePeer(isHost){
+        resetConnection();
+        pc = new RTCPeerConnection(pcConfig);
+
+        pc.onicecandidate = (evt)=>{
+          if(evt.candidate) return; // wait until gathering complete for simpler copy/paste
+          pc.localDescription && (localSignal.value = JSON.stringify(pc.localDescription));
+        };
+
+        pc.onconnectionstatechange = ()=>{
+          appendMessage('Connection state: ' + pc.connectionState, false);
+          if(pc.connectionState==='failed' || pc.connectionState==='disconnected'){
+            // keep UI, allow reset
+          }
+        };
+
+        pc.ondatachannel = (evt)=>{
+          dc = evt.channel;
+          setupDataChannel();
+        };
+
+        // create channel only for host
+        if(isHost){
+          dc = pc.createDataChannel('chat');
+          setupDataChannel();
         }
       }
 
-      async function copyQuote() {
-        const quote = quoteEl.textContent || '';
-        if (!quote) {
-          alert('There is no quote to copy.');
-          return;
-        }
-        const payload = `${quote}`;
-        try {
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            await navigator.clipboard.writeText(payload);
-            alert('Quote copied to clipboard');
-          } else {
-            const textarea = document.createElement('textarea');
-            textarea.value = payload;
-            textarea.style.position = 'fixed';
-            textarea.style.left = '-9999px';
-            document.body.appendChild(textarea);
-            textarea.select();
-            try {
-              document.execCommand('copy');
-              alert('Quote copied to clipboard');
-            } catch {
-              alert('Could not copy quote automatically.');
-            } finally {
-              document.body.removeChild(textarea);
-            }
+      function setupDataChannel(){
+        if(!dc) return;
+        dc.onopen = ()=> appendMessage('Chat channel open', false);
+        dc.onclose = ()=> appendMessage('Chat channel closed', false);
+        dc.onmessage = (evt)=> appendMessage(evt.data, false);
+      }
+
+      createOfferBtn.addEventListener('click', async ()=>{
+        try{
+          makePeer(true);
+          const offer = await pc.createOffer();
+          await pc.setLocalDescription(offer);
+          // wait briefly for ICE to gather; rely on onicecandidate to set localSignal when complete
+          setTimeout(()=>{ localSignal.value = JSON.stringify(pc.localDescription); }, 900);
+        }catch(e){ console.error(e); alert('Could not create offer'); }
+      });
+
+      createAnswerBtn.addEventListener('click', async ()=>{
+        try{
+          makePeer(false);
+          // joiner expects remote offer first; createAnswerBtn here will just prepare for an incoming offer
+          alert('Paste the remote offer into the Remote Signal field and then click Apply Remote Signal');
+        }catch(e){ console.error(e); alert('Could not prepare as joiner'); }
+      });
+
+      applyRemoteBtn.addEventListener('click', async ()=>{
+        if(!remoteSignal.value){ alert('Paste remote offer/answer first'); return; }
+        try{
+          const remoteDesc = JSON.parse(remoteSignal.value);
+          if(!pc){
+            // if remote is offer, we must be joiner and create peer
+            const isOffer = remoteDesc.type && remoteDesc.type.indexOf('offer')!==-1;
+            makePeer(!isOffer); // host=false if remote is offer
           }
-        } catch (err) {
-          console.log('Copy failed', err);
-          alert('Could not copy quote automatically.');
+          await pc.setRemoteDescription(remoteDesc);
+          if(remoteDesc.type && remoteDesc.type.indexOf('offer')!==-1){
+            // create answer
+            const answer = await pc.createAnswer();
+            await pc.setLocalDescription(answer);
+            // give ICE time, then set localSignal
+            setTimeout(()=>{ localSignal.value = JSON.stringify(pc.localDescription); }, 900);
+          }
+        }catch(e){ console.error(e); alert('Failed to apply remote signal'); }
+      });
+
+      resetConnBtn.addEventListener('click', resetConnection);
+
+      sendChat.addEventListener('click', sendChatMessage);
+      chatInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendChatMessage(); } });
+
+      function sendChatMessage(){
+        const msg = chatInput.value && chatInput.value.trim();
+        if(!msg) return;
+        if(dc && dc.readyState==='open'){
+          dc.send(msg);
+          appendMessage(msg, true);
+          chatInput.value = '';
+        } else {
+          appendMessage('Not connected. Use the signaling controls to connect peers.', false);
         }
       }
 
-      // notepad persistence
-      const STORAGE_KEY = 'inner_sanctuary_notepad_v1';
-      notepad.value = localStorage.getItem(STORAGE_KEY) || '';
-      notepad.addEventListener('input', () => {
-        localStorage.setItem(STORAGE_KEY, notepad.value);
-      });
+      /* Initial gentle reveal */
+      setTimeout(()=>{ document.getElementById('main').classList?.add('loaded'); }, 80);
 
-      clearNotepadBtn.addEventListener('click', () => {
-        const confirmed = confirm('Reset your notepad? This will remove saved content.');
-        if (!confirmed) return;
-        notepad.value = '';
-        localStorage.removeItem(STORAGE_KEY);
-        notepad.focus();
-      });
-
-      // attach event listeners
-      newQuoteBtn.addEventListener('click', generateQuote);
-      shareQuoteBtn.addEventListener('click', shareQuote);
-      copyQuoteBtn.addEventListener('click', copyQuote);
-
-      // keyboard shortcut A for new quote, C for copy when focused inside main content
-      document.getElementById('mainContent').addEventListener('keydown', (e) => {
-        if (e.altKey || e.ctrlKey || e.metaKey) return;
-        if (e.key === 'a' || e.key === 'A') {
-          e.preventDefault();
-          generateQuote();
-        } else if (e.key === 'c' || e.key === 'C') {
-          // avoid interfering with normal copy when selecting text in textarea
-          const activeTag = document.activeElement && document.activeElement.tagName;
-          if (activeTag !== 'TEXTAREA' && activeTag !== 'INPUT') {
-            e.preventDefault();
-            copyQuote();
-          }
-        }
-      });
-
-      // initial gentle reveal for first quote
-      setTimeout(() => {
-        quoteEl.style.opacity = '1';
-      }, 120);
-
-      // expose for debugging if needed
-      window.InnerSanctuary = {
-        generateQuote,
-        shareQuote,
-        copyQuote
-      };
+      /* Expose some helpers for debugging */
+      window.InnerSanctuary = {resetConnection, pickQuote};
     })();
   </script>
 </body>
